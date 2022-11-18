@@ -6,13 +6,13 @@ from flask import request
 # create the Flask app
 app = Flask(__name__)
 #### Boilerplate code - 1 #####
-
-#### Code to load NLP Model and prepare function ####
-from keras.preprocessing import sequence
-from keras.models import load_model
-from keras.preprocessing.text import text_to_word_sequence
-from keras.datasets import imdb
+import tensorflow as tf
+# from tensorflow.keras.utils import sequence
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing.text import text_to_word_sequence
+from tensorflow.keras.datasets import imdb
 import numpy as np
+
 
 # maximum words in each sentence
 maxlen = 10
@@ -36,7 +36,8 @@ def predict_sentiment(my_test):
         int_sequence.append(word_index[w])
 
     # pad the sequence of numbers to input size expected by model
-    sent_test = sequence.pad_sequences([int_sequence], maxlen=maxlen)
+    #sent_test = sequence.pad_sequences(int_sequence, maxlen=maxlen)
+    sent_test = tf.keras.utils.pad_sequences([int_sequence], maxlen=maxlen)
 
     # make a prediction using our Model
     y_pred = nlp_model.predict(sent_test)
@@ -93,8 +94,10 @@ def process():
         return htmlDefault
 ##### New Code #####
 
+#if _name_ == '_main_':
+    #app.run(debug=False,host='0.0.0.0',port=80)
 #### Boilerplate code - 2 #####
-# main application run code
+
+#run server
 if __name__ == '__main__':
-    app.run(debug=False,host='0.0.0.0',port=80)
-#### Boilerplate code - 2 #####
+    app.run(host='0.0.0.0', port=80)
